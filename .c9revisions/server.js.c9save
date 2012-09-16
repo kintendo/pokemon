@@ -1,0 +1,2 @@
+{"ts":1347340432281,"silentsave":true,"restoring":false,"patch":[[]],"length":0}
+{"contributors":[],"silentsave":false,"ts":1347340518787,"patch":[[{"diffs":[[1,"require(\"coffee-script\"); \n\nvar app = require(\"./app\");\napp.listen(process.env.PORT);"]],"start1":0,"start2":0,"length1":0,"length2":85}]],"length":85,"saved":false}
