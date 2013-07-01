@@ -1,0 +1,135 @@
+{
+	"abra" :
+	{
+		"type": "pokemon",
+		"hp" : 30,
+		"weakness": "psychic",
+		"element": "psychic",
+		"resistance": "none",
+		"retreat": 0,
+		"evolves": "none"
+	},
+	"kadabra" :
+	{
+		"type": "pokemon",
+		"hp" : 60,
+		"weakness": "psychic",
+		"element": "psychic",
+		"resistance": "none",
+		"retreat": 3,
+		"evolves": "abra"
+	},
+	"gastly" :
+	{
+		"type": "pokemon",
+		"hp": 30, 
+		"weakness": "none",
+		"element": "psychic",
+		"resistance": "fighting",
+		"retreat": 0,
+		"evolves": "none"
+	},
+	"haunter":
+	{
+		"type": "pokemon",
+		"hp": 60, 
+		"weakness": "none",
+		"element": "psychic",
+		"resistance": "fighting",
+		"retreat": 1,
+		"evolves": "gastly"
+	},
+	"jynx":
+	{
+		"type": "pokemon",
+		"hp": 70, 
+		"weakness": "psychic",
+		"element": "psychic",
+		"resistance": "none",
+		"retreat": 2,
+		"evolves": "none"
+	},
+	"drowzee":
+	{
+		"type": "pokemon",
+		"hp": 50, 
+		"weakness": "psychic",
+		"element": "psychic",
+		"resistance": "none",
+		"retreat": 1,
+		"evolves": "none"	
+	},
+	"mewtwo":
+	{
+		"type": "pokemon",
+		"hp": 60, 
+		"weakness": "psychic",
+		"element": "psychic",
+		"resistance": "none",
+		"retreat": 3,
+		"evolves": "none"	
+	},
+	"magnemite":
+	{
+		"type": "pokemon",
+		"hp": 40, 
+		"weakness": "fighting",
+		"element": "lightning",
+		"resistance": "none",
+		"retreat": 1,
+		"evolves": "none"
+	},
+	"pikachu":
+	{
+		"type": "pokemon",
+		"hp": 40, 
+		"weakness": "fighting",
+		"element": "lightning",
+		"resistance": "none",
+		"resists": 0,
+		"retreat": 1,
+		"evolves": "none"
+	},
+	"bill":
+	{
+		"type": "trainer"
+	},
+	"gust_of_wind":
+	{
+		"type": "trainer"
+	},
+	"switch":
+	{
+		"type": "trainer"
+	},
+	"potion":
+	{
+		"type": "trainer"
+	},
+	"super_potion":
+	{
+		"type": "trainer"
+	},
+	"defender":
+	{
+		"type": "trainer"
+	},
+	"professor_oak":
+	{
+		"type": "trainer"
+	},
+	"computer_search":
+	{
+		"type": "trainer"
+	},
+	"psychic_energy":
+	{
+		"type": "energy",
+		"element": "psychic"
+	},
+	"lightning_energy":
+	{
+		"type": "energy",
+		"element": "psychic"
+	}
+}

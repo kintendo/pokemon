@@ -1,0 +1,94 @@
+6/27/2013
+turn ended, just resets gym
+deal w/ dots in the future
+next: client side turn ending
+ambitious: implement pokemon evolving / benching
+super ambitious: implement pokemon attacking!
+
+6/26/2013
+uhm, i just discovered console.debug for client side js, what the fuck
+
+6/25/2013
+note: sending #{card} from client is bad
+	all logic should be handled server-side
+	client should just send vague controls
+	server side will interpret as source of truth
+	anyway, i'll do that later
+ncaught SyntaxError: Unexpected token u means accessing null json var
+all socket.io stuff goes through data
+retreating done!
+next: ending turns
+
+6/24/2013
+next: debug retreating
+
+6/21/2013
+deck shuffling now appends hand
+hand drawing now clears hand
+next: finish up retreat logic and tie in client side
+
+6/20/2013
+done w/ energy attaching
+need to keep track of one energy/turn
+prevent player actions not on his or her turn
+adding energy and retreat cooldown to gym object
+next: add retreating functionality
+
+6/19/2013
+maybe onclick can't have dynamic id's?
+oh my god i figured it out. fuck.
+for some reason, couldn't dynamic popover on id, only a class
+energy attaching works
+next: show attached cards
+
+6/18/2013
+use $(this) to pass the selector
+STOP USING SINGLE QUOTES
+coffeescript, like php, doesn't interpret single quoted strings
+next: figure out popover bug
+next: show attached button
+
+6/17/2013
+how do i pass an object and then use it as a selector?
+next: continue tooltip controls
+
+6/14/2013
+allowing players to constantly change decks and names and gyms before game start
+next: tooltip controls
+
+6/12/2013
+doesn't look like multiple client pages are possible
+doing deck loading, need to try catch file io
+the '?' is for null/undefined vs. eval to 0
+added new error message handler client side
+next: make everything modals
+
+6/11/2013
+client side needs the following 
+	root = exports ? this
+	root.foo = -> 'Hello World'
+reason? no clue. it just needs it for functions
+i can't believe i forgot to join 'lobby' UGH.
+redundant to send chats to yourself
+socket.io doesn't support coffeescript string variables
+gym joining now works more or less
+next: split lobby html from game html
+
+6/10/2013
+turning gyms into objects
+making player establish a name first
+adding a lobby to enter gyms from
+fascinating: equal sign creates a reference to entire obj.
+even more fascinating: deleting only deletes ref
+having trouble client side with sending chats. 
+next: have a working chat room in main lobby
+ambitious: implement choosing and joining rooms
+
+6/7/2013
+today turned Player and Pokemon into classes instead of random objects
+put all the random functions into the player class where it belongs.
+question: why do i have to put an extra 'this' at the end of an object?
+when calling a function w/o parameters, don't forget the parenthesis
+to call something within a class, just use @
+majority of bugs came from paranthesis and functions w/ node being confused
+next: implement chat rooms

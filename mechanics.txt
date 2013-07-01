@@ -1,0 +1,41 @@
+so...
+enter the website and you're in the main chat (no games here... enter your name! - modal to request name)
+room should be populated with a list of gyms to join (with number of people in gym and status of each gym)
+or you can create your own gym (create gym button, modal form for gym name, check if gym already exists!)
+or you can continue chatting
+
+if entering a gym, trainer name carries over
+two trainers per gym
+later (option to observe a gym)
+send game state broadcast to non-trainers, option to view from any side of table
+
+upon entering gym enter deck name to load deck
+pick starting pokemon by click and drag to positions
+click pokemon and drag to active/bench
+accept iff pokemon is basic
+accept iff not already populated
+when accepted check
+click "ready" when done choosing active/bench pokemon
+
+server tells client to render a finish choosing button
+client side check fails if nothing populated in active pokemon list
+each drag and drop visually appends to div by default, but do it by script
+finish choosing sends to server where player decided to bench and set pokemon
+
+click finish choosing button
+wait for other player
+on both players finished, start game, pick starting player
+game has a player's turn
+
+render game state
+give player options
+each bench can be click to see options:
+view larger card (modal)
+see attached cards
+hover over for stats
+each card in hand can be clicked to see options:
+view larger card (modal) 
+play card
+
+
+nice to have: drag and drop

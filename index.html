@@ -1,19 +1,259 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.3.3/coffee-script.min.js"></script>
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-</body>
-</html>
 
+<div class="row hide" id="pregame">
+	<div class="well span4">
+		<div class="input-append" id="trainer">
+			<input class="input-large" id="field_set_name" type="text"></input>
+			<button class="btn" id="btn_set_name" onClick="set_name()">Set Name</button>
+		</div>
+		<select id="gyms">
+		</select>
+		<div class="input-append">
+			<input class="input-large" id="field_gym_name" type="text" placeholder="or enter new gym name..."></input>
+			<button class="btn" id="btn_join_gym" onClick="join_gym()">Join Gym</button>
+		</div>
+		<div class="input-append" id="deck">
+			<input class="input-large" id="field_deck_name" type="text"></input>
+			<button class="btn" id="btn_load_deck" onClick="load_deck()">Load Deck</button>
+		</div>
+		<button class="btn" onClick="start_game()">Start Game</button>
+	</div>
+</div>
+
+<div class="hide" id="game">
+	<div class="row">
+		<div class="well" id="u_hand"></div>hand
+	</div>
+	<div class="row">
+		<div class="well span1" id="u_bench_1"></div>bench1
+		<div class="well span1" id="u_bench_2"></div>bench2
+		<div class="well span1" id="u_bench_3"></div>bench3
+		<div class="well span1" id="u_bench_4"></div>bench4
+		<div class="well span1" id="u_bench_5"></div>bench5
+	</div>
+	<div class="row">
+		<div class="well span2 u_active" id="u_active"></div>active
+	</div>
+	<div class="row">
+		<div class="well span2 i_active" id="i_active"></div>active
+	</div>
+	<div class="row">
+		<div class="well span1" id="i_bench_1"></div>bench1
+		<div class="well span1" id="i_bench_2"></div>bench2
+		<div class="well span1" id="i_bench_3"></div>bench3
+		<div class="well span1" id="i_bench_4"></div>bench4
+		<div class="well span1" id="i_bench_5"></div>bench5
+	</div>
+	<div class="row">
+		<div class="well" id="i_hand"></div>hand
+	</div>
+	<div class="well" id="control">
+		game control buttons
+	</div>
+</div>
+
+<!-- use this div for choosing cards -->
+<div class="modal hide" id="choose">
+	game card choosing
+</div>
+
+<!-- use this div for viewing cards -->
+<div class="modal hide" id="view">
+	game card viewing
+</div>
+
+<div class="well" id="chat_box">
+</div>
+<div class="input-append">
+	<input class="input-xxlarge" id="field_chat_message" type="text"></input>
+	<button id="btn_send_chat" class="btn" onClick="send_chat()">Send</button>
+</div>
+
+<div id="test"
+</div>
+</body>
 <script type="text/coffeescript">
-    socket = io.connect()
-    socket.on 'new_trainer', (data) ->
-        alert data.message
+	root = exports ? this
+	
+	url = "http://dl.dropbox.com/u/261248/pkmn/"
+	socket = io.connect()
+
+	$('#pregame').show()
+	$('#view').modal()
+	$('#view').modal('hide')
+
+	root.send_chat = () ->
+		$("#chat_box").append("<bold style='color:blue;'>me: </bold>#{$('#field_chat_message').val()} <br>")
+		socket.emit 'send_chat', {message: $('#field_chat_message').val()}
+		$('#field_chat_message').val('')
+
+	root.set_name = () ->
+		socket.emit 'set_name', {name: $("#field_set_name").val()}
+		$("#chat_box").append("<bold style='color:green;'>Prof. Oak: </bold>Greetings, <bold style='color:chocolate;'>#{$('#field_set_name').val()}</bold>!<br>")
+		$("#field_set_name").val('')
+
+	root.join_gym = () ->
+		socket.emit 'join_game', {name: $('#field_gym_name').val()}
+		$("#chat_box").append("<bold style='color:green;'>Prof. Oak: </bold>Welcome to the <bold style='color:chocolate;'>#{$('#field_gym_name').val()}</bold> gym. Prepare for battle!<br>")
+		$("#field_gym_name").val('')
+
+	root.load_deck = () ->
+		socket.emit 'set_deck', {deck: $('#field_deck_name').val()}
+		$("#chat_box").append("<bold style='color:green;'>Prof. Oak: </bold><bold style='color:chocolate;'>#{$('#field_deck_name').val()}</bold>! A fine deck choice.<br>")
+		$("#field_deck_name").val('')
+
+	root.start_game = () ->
+		socket.emit 'start_game', {}
+
+	root.view_card = (card) ->
+		$("#view").html("<img class=\"view\" width=\"100px\" height=\"140px\" alt=\"#{card}\" src=\"#{url}#{card}.jpeg\"></img>")
+		$("*").popover("hide")
+		$("#view").modal("show")
+
+	root.show_attached = (context, index) ->
+		$("*").popover("hide")
+		socket.emit 'show_attached', {context:context, index:index}
+
+	root.play_card = (card) ->
+		$("*").popover("hide")
+		socket.emit 'play_card', {card: card}
+
+	root.make_active = (index) ->
+		$("*").popover("hide")
+		socket.emit 'make_active', {index: index}
+
+	socket.on 'send_chat', (data) ->
+		$("#chat_box").append "<bold style='color:red;'>#{data.name}: </bold> #{data.message} <br>"
+
+	socket.on 'error', (data) ->
+		alert data.message
+
+	socket.on 'gym_list', (data) ->
+		if data.list
+			gyms = JSON.parse data.list
+			$('#gyms').html ''
+			for gym in gyms
+				$('#gyms').append "<span>#{gym}</span><br>"
+
+	socket.on 'get_active', (data) ->
+		$('#pregame').hide()
+		$('#game').show()
+		$('#choose').modal({backdrop: 'static'})
+		hand = JSON.parse data.hand
+		$('#choose').html ''
+		for card in hand
+			img_tag = "<img class=\"i_choice\" width=\"100px\" height=\"140px\" alt=\"#{card}\" src=\"#{url}#{card}.jpeg\"></img>"
+			$('#choose').append img_tag
+		$(".i_choice").unbind "click"
+		$(".i_choice").click () -> socket.emit 'set_active', {card: $(this).attr "alt"}
+
+	socket.on 'get_bench', (data) ->
+		hand = JSON.parse data.hand
+		$('#choose').html ''
+		for card in hand
+			img_tag = "<img class=\"i_choice\" width=\"100px\" height=\"140px\" alt=\"#{card}\" src=\"#{url}#{card}.jpeg\"></img>"
+			$('#choose').append img_tag
+		$(".i_choice").unbind "click"
+		$(".i_choice").click () -> socket.emit 'set_bench', {card: $(this).attr "alt"}
+		$('#choose').append "<button data-dismiss=\"modal\" id=\"set_end\">set end</button>"
+		$('#set_end').unbind "click"
+		$('#set_end').click () -> socket.emit 'set_end', {}
+
+	socket.on 'set_rival', (data) ->
+		socket.emit 'set_rival', { name: data.name }
+
+	socket.on 'ack_rival', (data) ->
+		socket.emit 'ack_rival', { name: data.name }
+
+	socket.on 'game_state', (data) ->
+		$("#test").html ""
+		i_turn = data.i_turn
+		if i_turn is "true" then $("#test").append "my_turn<br>" else $("#test").append "not my turn<br>"
+		i_hand = JSON.parse data.i_hand
+		$("#i_hand").html("")
+		for card, i in i_hand
+			img_tag = "<img id=\"i_hand_#{i+1}\" class=\"i_hand\" width=\"100px\" height=\"140px\" alt=\"#{card}\" src=\"#{url}#{card}.jpeg\"></img>"
+			$("#i_hand").append img_tag
+			$("#i_hand_#{i+1}").popover({html:"true", placement: 'top', content: "
+				<button class=\"btn\" onClick=\"view_card('#{card}')\">View Card</button>
+				<button class=\"btn\" onClick=\"play_card('#{card}')\">Play Card</button>"})
+		$(".i_hand").unbind "click"
+		$(".i_hand").click () -> $(this).popover("toggle")
+		i_name = data.i_name
+		$("#test").append "my name is #{i_name} <br>"
+		i_prizes = data.i_prizes
+		$("#test").append "prizes left: #{i_prizes} <br>"
+		i_bench = JSON.parse data.i_bench
+		for pkmn, i in i_bench
+			$("#i_bench_#{i+1}").html "<img class=\"i_bench\" width=\"100px\" height=\"140px\" alt=\"#{pkmn.name}\" src=\"#{url}#{pkmn.name}.jpeg\"></img>"
+			$("#i_bench_#{i+1}").popover({html:"true", placement:'top', content:"
+				<button class=\"btn\" onClick=\"view_card('#{pkmn.name}')\">View Card</button>
+				<button class=\"btn\" onClick=\"show_attached('i_bench','#{i}')\">Show Attached </button>
+				<button class=\"btn\" onClick=\"make_active('#{i}')\">Make Active</button>"})
+		$(".i_bench").unbind "click"
+		$(".i_bench").click () -> $(this).popover("toggle")
+		i_active = JSON.parse data.i_active
+		$("#i_active").html "<img width=\"100px\" height=\"140px\" alt=\"#{i_active.name}\" src=\"#{url}#{i_active.name}.jpeg\"></img>"
+		$("#i_active").popover({html:"true", content: "
+			<button class=\"btn\" onClick=\"view_card('#{i_active.name}')\">View Card</button>
+			<button class=\"btn\" onClick=\"show_attached('i_active','0')\">Show Attached</button>"})
+		$("#i_active").unbind "click"
+		$("#i_active").click () -> $(this).popover("toggle")
+		u_hand = data.u_hand
+		$("#u_hand").html "opponent has #{u_hand} cards"
+		u_name = data.u_name
+		$("#test").append "opponent name: #{u_name} <br>"
+		u_prizes = data.u_prizes
+		$("#test").append "opp prizes left: #{u_prizes} <br>"
+		u_active = JSON.parse data.u_active
+		$("#u_active").html "<img width=\"100px\" height=\"140px\" alt=\"#{u_active.name}\" src=\"#{url}#{u_active.name}.jpeg\"></img>"
+		u_bench = JSON.parse data.u_bench
+		for pkmn, i in u_bench
+			$("#u_bench_#{i+1}").html "<img width=\"100px\" height=\"140px\" alt=\"#{pkmn.name}\" src=\"#{url}#{pkmn.name}.jpeg\"></img>"
+
+	socket.on 'show_attached', (data) ->
+		cards = JSON.parse data.cards
+		$('#view').html ''
+		for card in cards
+			img_tag = "<img class=\"i_view\" width=\"100px\" height=\"140px\" alt=\"#{card}\" src=\"#{url}#{card}.jpeg\"></img>"
+			$('#view').append img_tag
+		$('#view').modal('show')
+
+	socket.on 'choose_energy_target', (data) ->
+		$('#choose').html ''
+		energy = data.energy
+		active = JSON.parse data.active
+		bench = JSON.parse data.bench
+		$('#choose').append "active<img class=\"i_choice\" width=\"100px\" height=\"140px\" alt=\"0\" src=\"#{url}#{active.name}.jpeg\"></img><br>bench"
+		for pkmn, i in bench
+			$('#choose').append "<img class=\"i_choice\" width=\"100px\" height=\"140px\" alt=\"#{i+1}\" src=\"#{url}#{pkmn.name}.jpeg\"></img>"
+		$(".i_choice").unbind "click"
+		$(".i_choice").click () -> 
+			$('#choose').modal('hide')
+			socket.emit 'attach_energy', {card: energy, index: $(this).attr("alt")}
+		$('#choose').modal("show")
+
+	socket.on 'select_energy', (data) ->
+		$('#choose').html ''
+		cards = JSON.parse data.cards
+		for card in cards
+			$('#choose').append "<img class=\"i_choice\" width=\"100px\" height=\"140px\" alt=\"#{card}\" src=\"#{url}#{card}.jpeg\"></img>"
+		$(".i_choice").unbind "click"
+		$(".i_choice").click () -> 
+			$('#choose').modal('hide')
+			socket.emit 'select_energy', {card: $(this).attr("alt")}
+		$('#choose').modal("show")
+
 </script>
+</html>
